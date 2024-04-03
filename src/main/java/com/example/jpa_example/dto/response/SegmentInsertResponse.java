@@ -14,14 +14,14 @@ public class SegmentInsertResponse {
     public String channelCode;
     public List<TenureInsertResponse> tenureEntities = new ArrayList<>();
 
-    public static SegmentInsertResponse setSegmentEntityToSegmentResponse(SegmentEntity segmentEntity) {
+    public static SegmentInsertResponse setSegmentEntityToSegmentResponse(SegmentEntity segmentEntity, List<TenureEntity> tenureEntities) {
         SegmentInsertResponse response = new SegmentInsertResponse();
         response.setSegmentId(segmentEntity.getSegmentId());
         response.setSegmentName(segmentEntity.getSegmentName());
         response.setApplicationType(segmentEntity.getApplicationType());
         response.setChannelCode(segmentEntity.getChannelCode());
 
-        for (TenureEntity tenureEntity : segmentEntity.getTenureEntities()){
+        for (TenureEntity tenureEntity : tenureEntities){
             TenureInsertResponse tenureInsertResponse = getTenureInsertResponse(segmentEntity, tenureEntity);
             response.getTenureEntities().add(tenureInsertResponse);
         }

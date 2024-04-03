@@ -20,27 +20,22 @@ public class SegmentService {
         this.segmentRepository = segmentRepository;
         this.tenureRepository = tenureRepository;
     }
-    public List<SegmentEntity> getAll() {
-       List<SegmentEntity> segmentEntities = this.segmentRepository.findAll();
+    public List<SegmentInsertResponse> getAll() {
+        List<SegmentEntity> segmentEntities = this.segmentRepository.findAll();
+        List<SegmentInsertResponse> segmentInsertResponses = new ArrayList<>();
 
-//       List<TenureEntity> tenureEntities = this.tenureRepository.findAll();
+       for (SegmentEntity segmentEntity : segmentEntities){
+           List<TenureEntity> tenureEntities = this.tenureRepository.findBySegment(segmentEntity);
+           segmentInsertResponses.add(SegmentInsertResponse.setSegmentEntityToSegmentResponse(segmentEntity, tenureEntities));
+       }
 
-//       List<SegmentInsertResponse> responses = new ArrayList<>();
-
-//       for (SegmentEntity segmentEntity : segmentEntities){
-//           for (TenureEntity tenureEntity : tenureEntities) {
-//               if (tenureEntity.getSegment().getSegmentId().equals(segmentEntity.getSegmentId()))
-//                   segmentEntity.getTenureEntities().add(tenureEntity);
-//           }
-//           responses.add(SegmentInsertResponse.setSegmentEntityToSegmentResponse(segmentEntity));
-//       }
-
-       return segmentEntities;
+       return segmentInsertResponses;
 
     }
 
     public SegmentInsertResponse saveSegmentEntity(SegmentInsertRequest segmentInsertRequest){
         SegmentEntity newSegmentEntity = new SegmentEntity();
+
         newSegmentEntity.setSegmentId(segmentInsertRequest.getSegmentId());
         newSegmentEntity.setSegmentName(segmentInsertRequest.getSegmentName());
         newSegmentEntity.setApplicationType(segmentInsertRequest.getApplicationType());
@@ -48,6 +43,8 @@ public class SegmentService {
 
         SegmentEntity savedSegment = this.segmentRepository.saveAndFlush(newSegmentEntity);
         newSegmentEntity.setSegmentId(savedSegment.getSegmentId());
+
+        List<TenureEntity> tenureEntities = new ArrayList<>();
 
         for (TenureInsertRequest tenureInsertRequest : segmentInsertRequest.getTenureEntities()){
             TenureEntity tenureEntity = new TenureEntity();
@@ -59,8 +56,8 @@ public class SegmentService {
             tenureEntity.setSegment(savedSegment);
 
             TenureEntity saveTenure = this.tenureRepository.saveAndFlush(tenureEntity);
-            newSegmentEntity.getTenureEntities().add(saveTenure);
+            tenureEntities.add(saveTenure);
         }
-        return SegmentInsertResponse.setSegmentEntityToSegmentResponse(newSegmentEntity);
+        return SegmentInsertResponse.setSegmentEntityToSegmentResponse(newSegmentEntity, tenureEntities);
     }
 }

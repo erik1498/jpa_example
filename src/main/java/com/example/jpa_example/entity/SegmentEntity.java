@@ -21,8 +21,6 @@ public class SegmentEntity implements Serializable {
     private String applicationType;
     @Column(name = "st_channel_code")
     private String channelCode;
-    @OneToMany(mappedBy = "segment")
-    private List<TenureEntity> tenureEntities = new ArrayList<>();
 
     public Long getSegmentId() {
         return segmentId;
@@ -56,11 +54,11 @@ public class SegmentEntity implements Serializable {
         this.channelCode = channelCode;
     }
 
-    public List<TenureEntity> getTenureEntities() {
-        return tenureEntities;
-    }
-
-    public void setTenureEntities(List<TenureEntity> tenureEntities) {
-        this.tenureEntities = tenureEntities;
-    }
+//    public List<TenureEntity> getTenureEntities() {
+//        return tenureEntities;
+//    }
+//
+//    public void setTenureEntities(List<TenureEntity> tenureEntities) {
+//        this.tenureEntities = tenureEntities;
+//    }
 }

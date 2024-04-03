@@ -18,7 +18,7 @@ public class TenureEntity implements Serializable {
     private String adminFee;
     @Column(name = "tt_insurance_fee")
     private String insuranceFee;
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = false, targetEntity = SegmentEntity.class)
     @JoinColumn(name = "tt_segment_id", referencedColumnName = "st_segment_id")
     private SegmentEntity segment;
 

@@ -22,7 +22,7 @@ public class SegmentController {
         this.segmentService = segmentService;
     }
     @GetMapping("/")
-    public List<SegmentEntity> getAllSegment(){
+    public List<SegmentInsertResponse> getAllSegment(){
         return this.segmentService.getAll();
     }
 
