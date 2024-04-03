@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SegmentService {
@@ -34,30 +35,43 @@ public class SegmentService {
     }
 
     public SegmentInsertResponse saveSegmentEntity(SegmentInsertRequest segmentInsertRequest){
-        SegmentEntity newSegmentEntity = new SegmentEntity();
+        Optional<SegmentEntity> segmentEntity = this.segmentRepository.findById(segmentInsertRequest.getSegmentId());
 
-        newSegmentEntity.setSegmentId(segmentInsertRequest.getSegmentId());
-        newSegmentEntity.setSegmentName(segmentInsertRequest.getSegmentName());
-        newSegmentEntity.setApplicationType(segmentInsertRequest.getApplicationType());
-        newSegmentEntity.setChannelCode(segmentInsertRequest.getChannelCode());
+        SegmentEntity segment = new SegmentEntity();
+        if (segmentEntity.isPresent()){
+            segment = segmentEntity.get();
+        }else {
+            segment.setSegmentId(segmentInsertRequest.getSegmentId());
+        }
 
-        SegmentEntity savedSegment = this.segmentRepository.saveAndFlush(newSegmentEntity);
-        newSegmentEntity.setSegmentId(savedSegment.getSegmentId());
+        segment.setSegmentName(segmentInsertRequest.getSegmentName());
+        segment.setApplicationType(segmentInsertRequest.getApplicationType());
+        segment.setChannelCode(segmentInsertRequest.getChannelCode());
+
+        SegmentEntity savedSegment = this.segmentRepository.saveAndFlush(segment);
+        segment.setSegmentId(savedSegment.getSegmentId());
 
         List<TenureEntity> tenureEntities = new ArrayList<>();
 
         for (TenureInsertRequest tenureInsertRequest : segmentInsertRequest.getTenureEntities()){
-            TenureEntity tenureEntity = new TenureEntity();
-            tenureEntity.setTenureId(tenureInsertRequest.getTenureId());
-            tenureEntity.setMsc(tenureInsertRequest.getMsc());
-            tenureEntity.setTenore(tenureInsertRequest.getTenore());
-            tenureEntity.setInsuranceFee(tenureInsertRequest.getInsuranceFee());
-            tenureEntity.setAdminFee(tenureInsertRequest.getAdminFee());
-            tenureEntity.setSegment(savedSegment);
+            TenureEntity tenure = new TenureEntity();
 
-            TenureEntity saveTenure = this.tenureRepository.saveAndFlush(tenureEntity);
+            Optional<TenureEntity> tenureEntity = this.tenureRepository.findById(tenureInsertRequest.getTenureId());
+
+            if (tenureEntity.isPresent()){
+                tenure = tenureEntity.get();
+            }
+
+            tenure.setTenureId(tenureInsertRequest.getTenureId());
+            tenure.setMsc(tenureInsertRequest.getMsc());
+            tenure.setTenore(tenureInsertRequest.getTenore());
+            tenure.setInsuranceFee(tenureInsertRequest.getInsuranceFee());
+            tenure.setAdminFee(tenureInsertRequest.getAdminFee());
+            tenure.setSegment(savedSegment);
+
+            TenureEntity saveTenure = this.tenureRepository.saveAndFlush(tenure);
             tenureEntities.add(saveTenure);
         }
-        return SegmentInsertResponse.setSegmentEntityToSegmentResponse(newSegmentEntity, tenureEntities);
+        return SegmentInsertResponse.setSegmentEntityToSegmentResponse(segment, tenureEntities);
     }
 }
