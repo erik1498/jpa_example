@@ -2,7 +2,7 @@ package com.example.jpa_example.dto.request;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-public class SegmentInsertRequest {
+public class SegmentRequestDTO {
     @NotNull(message = "segmentId is required")
     public Long segmentId;
     @NotNull(message = "segmentName is required")
@@ -11,7 +11,7 @@ public class SegmentInsertRequest {
     public String applicationType;
     @NotNull(message = "channelCode is required")
     public String channelCode;
-    public List<TenureInsertRequest> tenureEntities;
+    public List<TenureRequestDTO> tenureEntities;
 
     public Long getSegmentId() {
         return segmentId;
@@ -45,11 +45,11 @@ public class SegmentInsertRequest {
         this.channelCode = channelCode;
     }
 
-    public List<TenureInsertRequest> getTenureEntities() {
+    public List<TenureRequestDTO> getTenureEntities() {
         return tenureEntities;
     }
 
-    public void setTenureEntities(List<TenureInsertRequest> tenureEntities) {
+    public void setTenureEntities(List<TenureRequestDTO> tenureEntities) {
         this.tenureEntities = tenureEntities;
     }
 }

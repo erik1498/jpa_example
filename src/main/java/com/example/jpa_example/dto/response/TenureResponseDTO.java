@@ -1,7 +1,8 @@
-package com.example.jpa_example.dto.request;
+package com.example.jpa_example.dto.response;
 
-public class TenureInsertRequest {
+public class TenureResponseDTO {
     public Long tenureId;
+    public Long segmentId;
     public String msc;
     public String tenore;
     public String adminFee;
@@ -13,6 +14,14 @@ public class TenureInsertRequest {
 
     public void setTenureId(Long tenureId) {
         this.tenureId = tenureId;
+    }
+
+    public Long getSegmentId() {
+        return segmentId;
+    }
+
+    public void setSegmentId(Long segmentId) {
+        this.segmentId = segmentId;
     }
 
     public String getMsc() {

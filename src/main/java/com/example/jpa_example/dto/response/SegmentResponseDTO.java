@@ -1,43 +1,42 @@
 package com.example.jpa_example.dto.response;
 
-import com.example.jpa_example.dto.request.TenureInsertRequest;
 import com.example.jpa_example.entity.SegmentEntity;
 import com.example.jpa_example.entity.TenureEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SegmentInsertResponse {
+public class SegmentResponseDTO {
     public Long segmentId;
     public String segmentName;
     public String applicationType;
     public String channelCode;
-    public List<TenureInsertResponse> tenureEntities = new ArrayList<>();
+    public List<TenureResponseDTO> tenureEntities = new ArrayList<>();
 
-    public static SegmentInsertResponse setSegmentEntityToSegmentResponse(SegmentEntity segmentEntity, List<TenureEntity> tenureEntities) {
-        SegmentInsertResponse response = new SegmentInsertResponse();
+    public static SegmentResponseDTO setSegmentEntityToSegmentResponse(SegmentEntity segmentEntity, List<TenureEntity> tenureEntities) {
+        SegmentResponseDTO response = new SegmentResponseDTO();
         response.setSegmentId(segmentEntity.getSegmentId());
         response.setSegmentName(segmentEntity.getSegmentName());
         response.setApplicationType(segmentEntity.getApplicationType());
         response.setChannelCode(segmentEntity.getChannelCode());
 
         for (TenureEntity tenureEntity : tenureEntities){
-            TenureInsertResponse tenureInsertResponse = getTenureInsertResponse(segmentEntity, tenureEntity);
-            response.getTenureEntities().add(tenureInsertResponse);
+            TenureResponseDTO tenureResponseDTO = getTenureInsertResponse(segmentEntity, tenureEntity);
+            response.getTenureEntities().add(tenureResponseDTO);
         }
         return response;
     }
 
-    private static TenureInsertResponse getTenureInsertResponse(SegmentEntity segmentEntity, TenureEntity tenureEntity) {
-        TenureInsertResponse tenureInsertResponse = new TenureInsertResponse();
+    private static TenureResponseDTO getTenureInsertResponse(SegmentEntity segmentEntity, TenureEntity tenureEntity) {
+        TenureResponseDTO tenureResponseDTO = new TenureResponseDTO();
 
-        tenureInsertResponse.setSegmentId(segmentEntity.getSegmentId());
-        tenureInsertResponse.setTenureId(tenureEntity.getTenureId());
-        tenureInsertResponse.setAdminFee(tenureEntity.getAdminFee());
-        tenureInsertResponse.setMsc(tenureEntity.getMsc());
-        tenureInsertResponse.setTenore(tenureEntity.getTenore());
-        tenureInsertResponse.setInsuranceFee(tenureEntity.getInsuranceFee());
-        return tenureInsertResponse;
+        tenureResponseDTO.setSegmentId(segmentEntity.getSegmentId());
+        tenureResponseDTO.setTenureId(tenureEntity.getTenureId());
+        tenureResponseDTO.setAdminFee(tenureEntity.getAdminFee());
+        tenureResponseDTO.setMsc(tenureEntity.getMsc());
+        tenureResponseDTO.setTenore(tenureEntity.getTenore());
+        tenureResponseDTO.setInsuranceFee(tenureEntity.getInsuranceFee());
+        return tenureResponseDTO;
     }
 
     public Long getSegmentId() {
@@ -72,11 +71,11 @@ public class SegmentInsertResponse {
         this.channelCode = channelCode;
     }
 
-    public List<TenureInsertResponse> getTenureEntities() {
+    public List<TenureResponseDTO> getTenureEntities() {
         return tenureEntities;
     }
 
-    public void setTenureEntities(List<TenureInsertResponse> tenureEntities) {
+    public void setTenureEntities(List<TenureResponseDTO> tenureEntities) {
         this.tenureEntities = tenureEntities;
     }
 }
