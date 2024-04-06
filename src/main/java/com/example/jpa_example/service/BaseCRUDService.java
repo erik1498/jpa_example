@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface BaseCRUDService<TRequest, TResponse, TIdType, TSearchRequest> {
-    GlobalResponseDTO<List<TResponse>> getAll();
-    GlobalResponseDTO<TResponse> save(TRequest saveRequest);
-    GlobalResponseDTO<TResponse> update(TRequest updateRequest, TIdType id);
-    GlobalResponseDTO<Boolean> delete(TIdType id);
-    GlobalResponseDTO<Page<TResponse>> getAllBySizeAndPage(TSearchRequest searchRequest, Integer size, Integer page, String sortingBy, String sortingType);
+public interface BaseCRUDService<P, Q, R, S> {
+    GlobalResponseDTO<List<Q>> getAll();
+    GlobalResponseDTO<Q> save(P saveRequest);
+    GlobalResponseDTO<Q> update(P updateRequest, R id);
+    GlobalResponseDTO<Boolean> delete(R id);
+    GlobalResponseDTO<Page<Q>> getAllBySizeAndPage(S searchRequest, Integer size, Integer page, String sortingBy, String sortingType);
 }
