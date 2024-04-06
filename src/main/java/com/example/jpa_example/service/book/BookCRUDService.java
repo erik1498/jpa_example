@@ -2,20 +2,24 @@ package com.example.jpa_example.service.book;
 
 import com.example.jpa_example.constant.ResponseConstant;
 import com.example.jpa_example.dto.GlobalResponseDTO;
+import com.example.jpa_example.dto.book.request.BookSearchRequestDTO;
 import com.example.jpa_example.dto.book.request.BookSaveRequestDTO;
 import com.example.jpa_example.entity.BookEntity;
 import com.example.jpa_example.repository.BookRepository;
 import com.example.jpa_example.service.BaseCRUDService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
-public class BookCRUDService implements BaseCRUDService<BookSaveRequestDTO, BookEntity, String> {
+public class BookCRUDService implements BaseCRUDService<BookSaveRequestDTO, BookEntity, String, BookSearchRequestDTO> {
     final BookRepository bookRepository;
 
     public BookCRUDService(BookRepository bookRepository) {
@@ -109,6 +113,36 @@ public class BookCRUDService implements BaseCRUDService<BookSaveRequestDTO, Book
                     true,
                     ResponseConstant.SUCCESS,
                     Boolean.TRUE
+            );
+        }catch (Exception e) {
+            return new GlobalResponseDTO<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    false,
+                    e.getLocalizedMessage(),
+                    null
+            );
+        }
+    }
+
+    @Override
+    public GlobalResponseDTO<Page<BookEntity>> getAllBySizeAndPage(BookSearchRequestDTO bookSearchRequestDTO, Integer size, Integer page, String sortingBy, String sortingType) {
+        try{
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size,
+                    sortingType.equalsIgnoreCase("desc") ?
+                            Sort.by(sortingBy).descending()
+                            :
+                            Sort.by(sortingBy).ascending()
+            );
+            return new GlobalResponseDTO<>(
+                    HttpStatus.OK.value(),
+                    true,
+                    ResponseConstant.SUCCESS,
+                    this.bookRepository.findByBookNameContains(
+                            bookSearchRequestDTO.getSearchByBookName(),
+                            pageable
+                    )
             );
         }catch (Exception e) {
             return new GlobalResponseDTO<>(

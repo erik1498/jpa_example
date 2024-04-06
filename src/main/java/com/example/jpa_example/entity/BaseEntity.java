@@ -18,10 +18,10 @@ public class BaseEntity {
     private String uuid = UUID.randomUUID().toString();
 
     @CreationTimestamp
-    @Column(name = "bt_created_date", nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private Date createdDate;
 
     @UpdateTimestamp
-    @Column(name = "bt_modified_date", nullable = false)
+    @Column(name = "modified_date", nullable = false)
     private Date modifiedDate;
 }
